@@ -1,8 +1,8 @@
 node{
-  def mavenHome = tool name: 'maven3.8.4'
-  stage('1.Clone'){
-       git 'https://github.com/vnenkep/paypal-web-app'
-        sh "echo clonning successful
+ def mavenHome = tool name: 'maven3.8.4'
+  stage('1.clone'){
+    sh "echo clonning the latest version of the code"
+    sh "git clone https://github.com/vnenkep/paypal-web-app"
   }
   stage('2.MavenBuild'){
     sh "${mavenHome}/bin/mvn test"
