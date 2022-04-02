@@ -3,7 +3,6 @@ node{
   stage('1.clone'){
       "echo clonning the latest version of the code" 
             git 'https://github.com/vnenkep/paypal-web-app'
-            sh "echo clonning successful
   }
   stage('2.MavenBuild'){
     sh "${mavenHome}/bin/mvn test"
