@@ -20,19 +20,19 @@ node{
 }
       
       }
-          stage('7.approval'){
+          stage('6.approval'){
       timeout(time:8, unit:'HOURS'){
         input message: 'Please approve deployment to Production'
       }
      }
-   stage('8.Deploy2prod'){
+   stage('7.Deploy2prod'){
         sshagent(['agentcredentials']) {
         
          deploy adapters: [tomcat9(credentialsId: 'tomcat2_credentials', path: '', url: 'http://18.232.139.57:8080/')], contextPath: null, war: 'target/*war'
 }
       
       }
-      stage('9.EmailAlerts'){
+      stage('8.EmailAlerts'){
     emailext body: '''Hi
 
 Build status for boa app.
