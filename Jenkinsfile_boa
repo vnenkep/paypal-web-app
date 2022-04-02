@@ -5,8 +5,8 @@ node{
         sh "echo clonning successful
   }
   stage('2.MavenBuild'){
-    sh "${mavenHome}/bin/mvn clean package"
-   // bat 'mvn package'
+    sh "${mavenHome}/bin/mvn test"
+    sh "mvn clean package"
   }
       stage('3.CodeQuality'){
     sh "${mavenHome}/bin/mvn sonar:sonar"
