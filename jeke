@@ -1,0 +1,63 @@
+pipeline{
+  agent any 
+  tools{
+    maven "maven3.8.4"
+  }
+  stages{
+    stage('1.clone'){
+      steps{
+            sh "echo clonning the latest version of the code" 
+            git 'https://github.com/vnenkep/paypal-web-app'
+            sh "echo clonning successful"
+      }
+    }
+stage('2.Build'){
+      steps{
+        sh "echo validation, compilation, testing and package"
+        sh "echo testing successful and ready to package"
+        sh "mvn clean package"
+      }
+    }
+    stage('3.Quality'){
+      steps{
+        sh "echo performing code quality analysis"
+        sh "echo code quality successful and ready to upload"
+        sh "mvn sonar:sonar"
+      }
+    }
+  stage('4.uploadArtifacts'){
+      steps{
+        sh "mvn deploy"
+      }
+    }
+ stage('5.Deploy2UAT'){
+      steps{
+        sh "echo DEPLOYING TO UAT for further testing and validation"
+     sshagent(['maven2-cred']) {
+    // some block
+}
+        deploy adapters: [tomcat9(credentialsId: 'tomcat2_credentials', path: '', url: 'http://18.232.139.57:8080/')], contextPath: null, war: 'target/*war'
+      }
+    }
+   stage('7.Deploy2Prod'){
+      steps{
+        sh "echo DEPLOYING application TO Production"
+       sshagent(['maven2-cred']) {
+    // some block
+}
+        deploy adapters: [tomcat9(credentialsId: 'tomcat2_credentials', path: '', url: 'http://18.232.139.57:8080/')], contextPath: null, war: 'target/*war'
+      }
+    }
+  }
+post{
+    always{
+     emailext body: 'it was a succes', recipientProviders: [requestor()], subject: 'succes', to: 'vnenkep06@gmail.com'
+    }
+    success{
+      emailext body: 'it was a succes', recipientProviders: [requestor()], subject: 'succes', to: 'vnenkep06@gmail.com'
+    }
+    failure{
+      emailext body: 'it was a faillure', recipientProviders: [requestor()], subject: 'succes', to: 'vnenkep06@gmail.com'
+    }
+  }
+}
